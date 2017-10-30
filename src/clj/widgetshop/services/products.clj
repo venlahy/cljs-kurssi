@@ -1,8 +1,10 @@
 (ns widgetshop.services.products
-  (:require [widgetshop.components.http :refer [publish! transit-response]]
+  (:require [widgetshop.components.http :refer [publish! transit-response bad-request]]
             [com.stuartsierra.component :as component]
             [compojure.core :refer [routes GET POST]]
-            [clojure.java.jdbc :as jdbc]))
+            [clojure.java.jdbc :as jdbc]
+            [widgetshop.db :as db]
+            [clojure.spec.alpha :as s]))
 
 (defn fetch-products-for-category [db category]
   (into []
@@ -26,8 +28,10 @@
                            (transit-response
                             (fetch-product-categories db)))
                       (GET "/products/:category" [category]
+                        (if (s/valid? ::db/id (try (Long/parseLong category) (catch Exception e nil)))
                            (transit-response
-                            (fetch-products-for-category db (Long/parseLong category))))))))
+                            (fetch-products-for-category db (Long/parseLong category)))
+                           (bad-request)))))))
   (stop [{stop ::routes :as this}]
     (stop)
     (dissoc this ::routes)))

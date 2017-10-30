@@ -33,3 +33,8 @@
    :body (with-open [out (java.io.ByteArrayOutputStream.)]
            (transit/write (transit/writer out :json) data)
            (str out))})
+
+(defn bad-request
+  []
+  {:status 400
+   :body "Bad Request"})

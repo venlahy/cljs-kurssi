@@ -1,6 +1,8 @@
 (ns widgetshop.app.state
   "Defines the application state atom"
-  (:require [reagent.core :as r]))
+  (:require [reagent.core :as r]
+            [widgetshop.db :as db]
+            [cljs.spec.alpha :as s]))
 
 (defonce app (r/atom {:cart []
                       :categories :loading ;; list of product categories
@@ -20,4 +22,8 @@
   [update-fn & args]
   (swap! app
          (fn [current-app-state]
-           (apply update-fn current-app-state args))))
+           (let [result (apply update-fn current-app-state args)]
+             (if (s/valid? ::db/db result)
+                 result
+                 (do
+                   (throw (ex-info (str "spec check failed: " (s/explain-str ::db/db result)) {}))))))))

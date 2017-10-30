@@ -45,6 +45,8 @@
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-figwheel "0.5.10"]]
 
+  :repl-options {:port 51902}
+
   ;; Sources for backend: clj and cljc (shared with frontend)
   :source-paths ["src/clj" "src/cljc"]
 
