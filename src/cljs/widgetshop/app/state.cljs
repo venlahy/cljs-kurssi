@@ -27,3 +27,4 @@
                  result
                  (do
                    (throw (ex-info (str "spec check failed: " (s/explain-str ::db/db result)) {}))))))))
+

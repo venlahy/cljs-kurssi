@@ -24,6 +24,8 @@
     (assoc this ::routes
            (publish! http
                      (routes
+                       (GET "/" [] {:status 302
+                                    :headers {"Location" "/index.html"}})
                       (GET "/categories" []
                            (transit-response
                             (fetch-product-categories db)))

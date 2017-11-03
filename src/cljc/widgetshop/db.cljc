@@ -1,5 +1,6 @@
 (ns widgetshop.db
   (:require #?(:clj  [clojure.spec.alpha :as s]
+
                :cljs [cljs.spec.alpha :as s])))
 
 (s/def ::cart (s/coll-of integer?))
@@ -14,3 +15,4 @@
 (s/def ::products (s/or :loading ::loading :products (s/coll-of ::product)))
 (s/def ::products-by-category (s/every-kv ::category ::products))
 (s/def ::db (s/keys :req-un [::category ::categories ::products-by-category]))
+
