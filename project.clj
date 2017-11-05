@@ -29,6 +29,8 @@
                  ;; Ajax library for frontend
                  [cljs-ajax "0.7.2"]
 
+                 ;; Doo for testing
+                 [lein-doo "0.1.7"]
 
                  ;; Frontend UI-libraries
                  [reagent "0.7.0"]
@@ -43,7 +45,8 @@
                  ]
 
   :plugins [[lein-cljsbuild "1.1.5"]
-            [lein-figwheel "0.5.10"]]
+            [lein-figwheel "0.5.10"]
+            [lein-doo "0.1.7"]]
 
   :repl-options {:port 51902}
 
@@ -52,12 +55,30 @@
 
   ;; Configure ClojureScript builds
   :cljsbuild {:builds
-              [{:id "dev"
+              [{:id           "dev"
                 :source-paths ["src/cljs" "src/cljc"]
-                :figwheel {:on-jsload "widgetshop.main/reload-hook"}
-                :compiler {:optimizations :none
-                           :source-map true
-                           :output-to "resources/public/js/widgetshop.js"
-                           :output-dir "resources/public/js/out"}}]}
+                :figwheel     {:on-jsload "widgetshop.main/reload-hook"}
+                :compiler     {:optimizations :none
+                               :source-map    true
+                               :output-to     "resources/public/js/widgetshop.js"
+                               :output-dir    "resources/public/js/out"}}]}
 
+  ;; Add doo-runner
+  :profiles
+  {:doo {
+         :cljsbuild
+         {:builds
+          [{:id           "cljs-test"
+            :source-paths ["src/cljs" "src/cljc" "test/cljs/"]
+            :compiler     {:output-to     "out/browser_tests.js"
+                           :main          "widgetshop.test-runner"
+                           :target        :phantom
+                           :optimizations :none}}
+
+           ]}}}
+
+
+  :aliases {
+            "run-doo"      ["with-profile" "doo" "doo" "phantom" "cljs-test"]
+            }
   :main widgetshop.main)
