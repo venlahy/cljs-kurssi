@@ -4,7 +4,7 @@
             [widgetshop.db :as db]
             [cljs.spec.alpha :as s]))
 
-(defonce app (r/atom {:cart []
+(defonce app (r/atom {:cart {}
                       :categories :loading ;; list of product categories
                       :category nil ;; the selected category
 

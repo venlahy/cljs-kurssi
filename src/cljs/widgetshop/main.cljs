@@ -31,7 +31,7 @@
 (defn products-listing
   [app]
   ;; Product listing for the selected category
-  (let [products ((:products-by-category app) (:category app))]
+  (let [products (products/by-category app (:category app))]
     (if (= :loading products)
       [ui/refresh-indicator {:status "loading" :size 40 :left 10 :top 10}]
 
@@ -43,14 +43,14 @@
          [ui/table-header-column "Price (€)"]
          [ui/table-header-column "Add to cart"]]]
        [ui/table-body {:display-row-checkbox false}
-        (for [{:keys [id name description price]} ((:products-by-category app) (:category app))]
+        (for [{:keys [id name description price] :as product} (products/by-category app (:category app))]
           ^{:key id}
           [ui/table-row
            [ui/table-row-column name]
            [ui/table-row-column description]
            [ui/table-row-column price]
            [ui/table-row-column
-            [ui/flat-button {:primary true :on-click #(js/alert "add to cart!")}
+            [ui/flat-button {:primary true :on-click #(products/add-to-cart! product)}
              "Add to cart"]]])]])))
 
 (defn widgetshop [app]
@@ -60,7 +60,7 @@
    [:div
     [ui/app-bar {:title "Widgetshop!"
                  :icon-element-right
-                 (r/as-element [ui/badge {:badge-content (count (:cart app))
+                 (r/as-element [ui/badge {:badge-content (products/cart-size app)
                                           :badge-style {:top 12 :right 12}}
                                 [ui/icon-button {:tooltip "Checkout"}
                                  (ic/action-shopping-cart)]])}]

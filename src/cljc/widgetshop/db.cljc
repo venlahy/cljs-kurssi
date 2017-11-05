@@ -3,7 +3,7 @@
 
                :cljs [cljs.spec.alpha :as s])))
 
-(s/def ::cart (s/coll-of integer?))
+(s/def ::cart (s/every-kv ::product integer?))
 (s/def ::id integer?)
 (s/def ::name string?)
 (s/def ::description string?)
