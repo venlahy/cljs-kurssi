@@ -16,6 +16,14 @@
 ;; Task 2: Add actions to add item to cart. See that cart badge is automatically updated.
 ;;
 
+(defn top-bar [app]
+  [ui/app-bar {:title "Widgetshop!"
+               :icon-element-right
+                      (r/as-element [ui/badge {:badge-content (count (:cart app))
+                                               :badge-style   {:top 12 :right 12}}
+                                     [ui/icon-button {:tooltip "Checkout"}
+                                      (ic/action-shopping-cart)]])}])
+
 (defn category-selector
   [app]
   ;; Product category selection
@@ -50,7 +58,7 @@
            [ui/table-row-column description]
            [ui/table-row-column price]
            [ui/table-row-column
-            [ui/flat-button {:primary true :on-click #(products/add-to-cart! product)}
+            [ui/flat-button {:primary true :on-click #(products/add-product-to-cart! id)}
              "Add to cart"]]])]])))
 
 (defn widgetshop [app]
@@ -58,12 +66,7 @@
    {:mui-theme (get-mui-theme
                 {:palette {:text-color (color :green600)}})}
    [:div
-    [ui/app-bar {:title "Widgetshop!"
-                 :icon-element-right
-                 (r/as-element [ui/badge {:badge-content (products/cart-size app)
-                                          :badge-style {:top 12 :right 12}}
-                                [ui/icon-button {:tooltip "Checkout"}
-                                 (ic/action-shopping-cart)]])}]
+    [top-bar app]
     [ui/paper
      [category-selector app]
      [products-listing app]

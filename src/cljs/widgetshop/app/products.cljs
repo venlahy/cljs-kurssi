@@ -31,22 +31,11 @@
   [app selected-category]
   ((:products-by-category app) selected-category))
 
-(defn inc-if-nil-1
-  "If value is nil returns 1 otherwise increases"
-  [v]
-  (if (nil? v)
-    1
-    (inc v)))
+(defn- add-product-to-cart [app product-id]
+  (assoc app :cart (conj (:cart app) product-id)))
 
-(defn add-to-cart
-  [app category]
-  (update-in app [:cart category] inc-if-nil-1))
-
-(defn add-to-cart!
-  [product]
-  (state/update-state!
-    add-to-cart
-    product))
+(defn add-product-to-cart! [id]
+  (state/update-state! add-product-to-cart id))
 
 (defn cart-size
   [app]

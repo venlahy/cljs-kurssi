@@ -34,12 +34,12 @@
     (let [item {:id 1 :name :foo-item}
           db-before {:cart {}}
           expected {:cart {item 1}}]
-      (is (= (p/add-to-cart db-before item) expected))))
+      (is (= (p/add-product-to-cart db-before item) expected))))
   (testing "Adding another item to category"
     (let [item {:id 1 :name :foo-item}
           db-before {:cart {item 1}}
           expected {:cart {item 2}}]
-      (is (= (p/add-to-cart db-before item) expected)))))
+      (is (= (p/add-product-to-cart db-before item) expected)))))
 
 (deftest cart-size
   (testing "Empty cart"
